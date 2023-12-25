@@ -1,0 +1,66 @@
+pipeline {
+    agent none
+    
+    stages {
+        stage('start build') {
+            matrix {
+                agent { label "${BUILDER}" }
+
+                axes {
+                    axis {
+                        name 'BUILDER'
+                        values 'builder-el8', 'builder-el7'
+                    }
+                }
+
+                stages {
+                    stage('clone repo') {
+                        steps {
+                            checkout scm
+                        }
+                    }
+                    stage('modifyMakefile') { 
+                        steps {
+                            script {
+                                sh 'ls -all'
+                                sh "sed -i \"s/^export VS_NAME\\s*=.*/export VS_NAME = $VS_NAME/\" Makefile"
+                                sh "sed -i \"s/^export VS_PRODUCT\\s*=.*/export VS_PRODUCT = $VS_PRODUCT/\" Makefile"
+                                sh "sed -i \"s/^export VS_VERSION\\s*=.*/export VS_VERSION = $VS_VERSION/\" Makefile"
+                                sh "sed -i \"s/^# export VS_BUILD_TS [^=]*=.*/# export VS_BUILD_TS = $VS_BUILD_TS/\" Makefile"
+                                sh "sed -i \"s/^export VS_BUILD_TS[^=]*=.*/export VS_BUILD_TS = $VS_BUILD_TS/\" Makefile"
+                                sh 'cat Makefile'
+                            }
+                        }
+                    }
+                    stage('setup') {
+                        steps {
+                            sh 'ls -all'
+                            sh './setup-repo.sh'
+                        }
+                    }
+                    stage('clean') {
+                        steps {
+                            sh 'git submodule foreach --recursive git checkout -- .'
+                            sh 'make distclean && make gitclean'
+                        }
+                    }
+                    stage('make') {
+                        steps {
+                            sh 'make -j72 2>&1 | tee build.log'
+                        }
+                    }
+                    stage('package') {
+                        steps {
+                            sh 'make package'
+                        }
+                    }
+                    stage('upload') {
+                        steps {
+                            sh 'make upload'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
