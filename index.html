@@ -14,10 +14,42 @@
     window.$docsify = {
       name: 'Midas\'notes',
       repo: 'https://github.com/Zoey-Qin/notes.git'
+      loadSidebar: true,
+
+        subMaxLevel: 2,
+        alias: {
+          "/.*/_sidebar.md": "/_sidebar.md",
+        },
+        // 跳转后自动到顶部
+        auto2top: true,
+
+        coverpage: true,
+        // PLUGINS
+        // ----------------------------------------------------------------
+        // 页面右侧 toc
+        toc: {
+          tocMaxLevel: 2,
+          target: "h2, h3, h4, h5, h6",
+        },
+        // 底部导航
+        pagination: {
+          previousText: "BACK",
+          nextText: "NEXT",
+          crossChapter: true,
+          crossChapterText: true,
+        }
     }
   </script>
+  <!-- 侧边栏目录折叠 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+  <!-- emoji -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
   <!-- 图片缩放 -->
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <!-- 多tab支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1/dist/docsify-tabs.min.js"></script>
+  <!-- 代码复制 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2/dist/docsify-copy-code.min.js"></script>
   <!-- 搜索插件 -->
   <script>
     window.$docsify = {
