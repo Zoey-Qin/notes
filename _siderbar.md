@@ -2,5 +2,4 @@
 
 > An awesome project.
 
-- CEPH
-  - 测试侧边栏
+- [Ansible]()
