@@ -8,3 +8,4 @@ rpm -ql ansible
 
 ![img](assets/epub_845384_25.jpeg)
 
+​	
